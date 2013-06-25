@@ -7,7 +7,7 @@ test = False
 verbose = False
 
 def usage():
-    print "--- Help ---"
+    print "Directory Cleaner, cleans a directory for sub directories, starting with the oldest\n"
     print "-c or --cron\t\tIn cron mode, be quiet"
     print "-d or --dir\t\tDirectory to clean"
     print "-h or --help\t\tShows this help"
