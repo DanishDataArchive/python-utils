@@ -16,7 +16,7 @@ def usage():
     print "-v or --verbose\t\tVerbose, tell which files are being deleted"
 
 def log(message):
-    if verbose:
+    if verbose and not cron:
         print message
 
     syslog.syslog(message)
