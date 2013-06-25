@@ -21,6 +21,9 @@ def log(message):
 
     syslog.syslog(message)
 
+def onerror(function, path, sysinfo):
+    log("Can't delete " + path)
+
 def clean(directory, maxdirs):
     subdirs = os.listdir(directory)
     dirsToRemove = len(subdirs) - maxdirs
@@ -41,7 +44,10 @@ def clean(directory, maxdirs):
         dirsWithDate = []
         
         for dir in subdirs:
-            dirsWithDate.append((dir, os.path.getctime(os.path.join(directory, dir))))
+            if not os.path.islink(os.path.join(directory, dir)):
+                dirsWithDate.append((dir, os.path.getctime(os.path.join(directory, dir))))
+            elif dirsToRemove > 0:
+                dirsToRemove -= 1
             
         dirsWithDate.sort(cmp=None, key=lambda x: x[1], reverse=False)
         
@@ -56,7 +62,7 @@ def clean(directory, maxdirs):
             
             if not test:
                 log("Deleting " + os.path.join(directory, dirsWithDate[i][0]))
-                shutil.rmtree(os.path.join(directory, dirsWithDate[i][0]))
+                shutil.rmtree(os.path.join(directory, dirsWithDate[i][0]), False, onerror)
             
             i += 1
 
