@@ -91,7 +91,7 @@ if __name__ == "__main__":
             syslog.closelog()
             sys.exit(0)
             
-        elif o in ("-d" or "--dir"):
+        elif o in ("-d", "--dir"):
             dir = a
             if not os.path.isdir(dir):
                 print "Path " + dir + " is not a dir or doesn't exist"
