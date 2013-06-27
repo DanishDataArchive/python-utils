@@ -26,6 +26,11 @@ def onerror(function, path, sysinfo):
 
 def clean(directory, maxdirs):
     subdirs = os.listdir(directory)
+    
+    for dir in subdirs:
+        if not os.path.isdir(os.path.join(directory, dir)) or os.path.islink(os.path.join(directory, dir)):
+            subdirs.remove(dir)
+    
     dirsToRemove = len(subdirs) - maxdirs
     
     if dirsToRemove < 0:
@@ -44,10 +49,7 @@ def clean(directory, maxdirs):
         dirsWithDate = []
         
         for dir in subdirs:
-            if not os.path.islink(os.path.join(directory, dir)):
-                dirsWithDate.append((dir, os.path.getctime(os.path.join(directory, dir))))
-            elif dirsToRemove > 0:
-                dirsToRemove -= 1
+            dirsWithDate.append((dir, os.path.getctime(os.path.join(directory, dir))))
             
         dirsWithDate.sort(cmp=None, key=lambda x: x[1], reverse=False)
         
