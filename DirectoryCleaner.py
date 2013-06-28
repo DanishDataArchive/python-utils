@@ -49,7 +49,7 @@ def clean(directory, maxdirs):
         dirsWithDate = []
         
         for dir in subdirs:
-            dirsWithDate.append((dir, os.path.getctime(os.path.join(directory, dir))))
+            dirsWithDate.append((dir, os.path.getmtime(os.path.join(directory, dir))))
             
         dirsWithDate.sort(cmp=None, key=lambda x: x[1], reverse=False)
         
