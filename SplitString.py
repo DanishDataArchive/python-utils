@@ -25,4 +25,3 @@ if __name__ == "__main__":
     
     for split in splits:
         print split
-    
