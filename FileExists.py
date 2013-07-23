@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import getopt, sys, os
+import sys, os
 
 class FileColors:
     EXISTS = '\033[92m'
