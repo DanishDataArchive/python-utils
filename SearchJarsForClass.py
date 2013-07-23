@@ -36,8 +36,14 @@ if __name__ == "__main__":
         for filename in zFile.namelist():
             if filename.endswith(".class"):
                 key = filename.replace('/', '.').replace(".class", "").strip()
-                classes[key] = file + "!" + filename
+                if classes.has_key(key):
+                    classes[key].append(file + "!" + filename)
+                else:
+                    classes[key] = [file + "!" + filename]
         zFile.close()
 
     if classes.has_key(classToFind):
-        print classes[classToFind]
+        for line in classes[classToFind]:
+            print line
+    else:
+        print "Not found"
