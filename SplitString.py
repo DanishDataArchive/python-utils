@@ -23,8 +23,6 @@ if __name__ == "__main__":
         
     splits = line.split(delimiter)
     
-    print "Lines:"
-    
     for split in splits:
         print split
     
