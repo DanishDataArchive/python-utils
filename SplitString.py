@@ -21,7 +21,7 @@ if __name__ == "__main__":
         print "Please pass a string"
         sys.exit(-1)
         
-    splits = line.rsplit(delimiter)
+    splits = line.split(delimiter)
     
     print "Lines:"
     
