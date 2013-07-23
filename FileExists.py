@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys, os
+import getopt, sys, os
 
 class FileColors:
     EXISTS = '\033[92m'
@@ -20,12 +20,24 @@ def checkIfFilesExists(files):
 if __name__ == "__main__":
     lines = []
     
-    for line in sys.stdin:
-        lines.append(line.rstrip("\n"))
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "f:", ["files="])
 
+    except getopt.GetoptError as err:
+        print str(err);
+
+    for o, a in opts:
+        if o in ("-f", "--files"):
+            files = open(a)
+            for line in files.readlines():
+                lines.append(line.rstrip("\n"))
+            files.close()
+
+    if len(lines) == 0:
+        for line in sys.stdin:
+            lines.append(line.rstrip("\n"))
 
     if len(lines) == 0:
         print "Please provide some files to check for"
     
     checkIfFilesExists(lines)    
-    
