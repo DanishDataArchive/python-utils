@@ -7,12 +7,15 @@ class FileColors:
     DOES_NOT_EXISTS = '\033[91m'
     END = '\033[0m'
 
+def checkIfFileExists(file):
+    if os.path.isfile(file):
+        print file + (FileColors.EXISTS + " exists" + FileColors.END if os.path.exists(file) else FileColors.DOES_NOT_EXISTS + " does not exist" + FileColors.END)
+    else:
+        print FileColors.DOES_NOT_EXISTS + file + " is not a file" + FileColors.END
+
 def checkIfFilesExists(files):
     for file in files:
-        if os.path.isfile(file):
-            print file + (FileColors.EXISTS + " exists" + FileColors.END if os.path.exists(file) else FileColors.DOES_NOT_EXISTS + " does not exist" + FileColors.END)
-        else:
-            print FileColors.DOES_NOT_EXISTS + file + " is not a file" + FileColors.END
+        checkIfFileExists(file)
 
 if __name__ == "__main__":
     lines = []
