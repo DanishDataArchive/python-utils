@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import magic, getopt, sys
+import getopt, sys
 
 if __name__ == "__main__":
     try:
