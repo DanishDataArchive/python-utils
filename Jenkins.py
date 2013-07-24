@@ -12,6 +12,9 @@ secure = False
 host = ""
 port = ""
 
+projectName = ""
+buildNumber = 0
+
 def buildHostUrl():
     url = protocol
     
@@ -29,6 +32,12 @@ def buildHostUrl():
     url += "/"
     
     return url
+
+def getConsoleOutputForBuild(projectName, buildId):
+    try:
+        return urllib2.urlopen(buildHostUrl() + "job/" + projectName + "/" + str(buildId) + "/logText/progressiveText?start=0").read()
+    except urllib2.HTTPError as err:
+        print err.reason
 
 def evalJson(json):
     (true,false,null) = (True,False,None)
@@ -51,7 +60,7 @@ def getProjects():
 
 if __name__ == '__main__':
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "eh:lp:s", ["encrypted", "host=", "list", "port=", "status"])
+        opts, args = getopt.getopt(sys.argv[1:], "b:ceh:j:lp:s", ["build=", "console", "encrypted", "host=", "job=", "list", "port=", "status"])
         
     except getopt.GetoptError as err:
         print str(err)
@@ -93,3 +102,14 @@ if __name__ == '__main__':
                     print "\tLast Unsuccessful: " + str(unsucces['number']) + " at " + str(getDateTimeFromTimeStamp(unsuccessDetails['timestamp']))
         elif o in ("-e", "--encrypted"):
             secure = True
+
+        elif o in ("-c" or "--console"):
+            output = getConsoleOutputForBuild(projectName, buildNumber)
+            if output:
+                print output
+
+        elif o in ("-j" or "--job"):
+            projectName = a
+
+        elif o in ("-b" or "--build"):
+            buildNumber = a
