@@ -55,12 +55,16 @@ def getBuildDetails(projectName, buildId):
 def getDateTimeFromTimeStamp(timestamp):
     return datetime.datetime.fromtimestamp(int(timestamp) / 1e3)
 
+def startBuildOfJob(job):
+    req = urllib2.Request(buildHostUrl() + "job/" + job + "/build")
+    urllib2.urlopen(req).read()
+
 def getProjects():
     return evalJson(buildHostUrl() + "api/python?pretty=true")
 
 if __name__ == '__main__':
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "b:ceh:j:lp:s", ["build=", "console", "encrypted", "host=", "job=", "list", "port=", "status"])
+        opts, args = getopt.getopt(sys.argv[1:], "b:ceh:j:lp:qs", ["build=", "console", "encrypted", "host=", "job=", "list", "port=", "start-job", "status"])
         
     except getopt.GetoptError as err:
         print str(err)
@@ -78,6 +82,8 @@ if __name__ == '__main__':
             for project in projects['jobs']:
                 if project['color'] == "blue":
                     print JobColors.SUCCES + project['name'] + JobColors.END
+                elif project['color'] == "blue_anime":
+                    print JobColors.SUCCES + project['name'] + " (working)" + JobColors.END
                 else:
                     print JobColors.FAIL + project['name'] + " (" + project['color'] + ")" + JobColors.END
 
@@ -87,6 +93,8 @@ if __name__ == '__main__':
             for project in projects['jobs']:
                 if project['color'] == "blue":
                     print JobColors.SUCCES + project['name'] + JobColors.END
+                elif project['color'] == "blue_anime":
+                    print JobColors.SUCCES + project['name'] + " (working)" + JobColors.END
                 else:
                     print JobColors.FAIL + project['name'] + " (" + project['color'] + ")" + JobColors.END
         
@@ -113,3 +121,6 @@ if __name__ == '__main__':
 
         elif o in ("-b" or "--build"):
             buildNumber = a
+
+        elif o in ("-q" or "start-job"):
+            startBuildOfJob(projectName)
