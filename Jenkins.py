@@ -80,6 +80,8 @@ if __name__ == '__main__':
                 port = Config.get('global', option)
             elif option in 'protocol':
                 protocol = Config.get('global', option)
+            elif option in 'secure':
+                secure = Config.getboolean('global', option)
 
     for o, a in opts:
         if o in ("-h", "--host"):
