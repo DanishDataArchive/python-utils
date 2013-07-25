@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import urllib2, datetime, sys, getopt
+import urllib2, datetime, sys, getopt, ConfigParser, os
 
 class JobColors:
     SUCCES = '\033[92m'
@@ -69,6 +69,18 @@ if __name__ == '__main__':
     except getopt.GetoptError as err:
         print str(err)
     
+    Config = ConfigParser.ConfigParser()
+    Config.read(os.path.join(os.path.expanduser("~"), ".py-jenkins/py-jenkins.conf"))
+
+    if 'global' in Config.sections():
+        for option in Config.options('global'):
+            if option in 'host':
+                host = Config.get('global', option)
+            elif option in 'port':
+                port = Config.get('global', option)
+            elif option in 'protocol':
+                protocol = Config.get('global', option)
+
     for o, a in opts:
         if o in ("-h", "--host"):
             host = a
