@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 
-import getopt, sys, os, zipfile
+import getopt, sys, os, zipfile, pkg_resources
 
 def printUsage():
     print os.path.basename(sys.argv[0]) + ", search a number of jar files for class\n"
     print "-c or --class\t\tclass to find"
     print "-j or--jars\t\tfile container location of the jars, alternatively you can specify on stdin"
     print "-v or --verbose\t\tshow which classes are in the jars"
+    print "-V or --version\t\tshow the version"
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "c:j:v", ["class=", "jars=", "verbose"])
+        opts, args = getopt.getopt(sys.argv[1:], "c:hj:vV", ["class=", "help", "jars=", "verbose", "version"])
 
     except getopt.GetoptError as err:
         print str(err)
@@ -32,6 +33,10 @@ def main():
             verbose = True
         elif o in ("-h", "--help"):
             printUsage()
+            sys.exit(0)
+        elif o in  ("-V", "--version"):
+            print pkg_resources.require("py-utils-dda")[0].version
+            sys.exit(0)
 
     if len(lines) == 0:
         for line in sys.stdin:
