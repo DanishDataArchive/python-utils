@@ -69,6 +69,10 @@ def clean(directory, maxdirs):
             i += 1
 
 def main():
+    global cron
+    global test
+    global verbose
+
     syslog.openlog("DirectoryCleaner")
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hd:tm:cv", ["help", "dir=", "test", "max-dirs=", "cron", "verbose"])

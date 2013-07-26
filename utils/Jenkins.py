@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import urllib2, datetime, sys, getopt, ConfigParser, os
+import urllib2, datetime, sys, getopt, ConfigParser, os, pkg_resources
 
 class JobColors:
     SUCCES = '\033[92m'
@@ -63,8 +63,13 @@ def getProjects():
     return evalJson(buildHostUrl() + "api/python?pretty=true")
 
 def main():
+    global host
+    global port
+    global protocol
+    global secure
+
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "b:ceh:j:lp:qs", ["build=", "console", "encrypted", "host=", "job=", "list", "port=", "start-job", "status"])
+        opts, args = getopt.getopt(sys.argv[1:], "b:ceh:j:lp:qsv", ["build=", "console", "encrypted", "host=", "job=", "list", "port=", "start-job", "status", "version"])
         
     except getopt.GetoptError as err:
         print str(err)
@@ -138,6 +143,9 @@ def main():
 
         elif o in ("-q" or "start-job"):
             startBuildOfJob(projectName)
+
+        elif o in ("-v" or "version"):
+            print pkg_resources.require("py-utils-dda")[0].version
 
 if __name__ == '__main__':
     main()
