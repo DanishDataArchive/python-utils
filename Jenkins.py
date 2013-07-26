@@ -62,7 +62,7 @@ def startBuildOfJob(job):
 def getProjects():
     return evalJson(buildHostUrl() + "api/python?pretty=true")
 
-if __name__ == '__main__':
+def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "b:ceh:j:lp:qs", ["build=", "console", "encrypted", "host=", "job=", "list", "port=", "start-job", "status"])
         
@@ -138,3 +138,6 @@ if __name__ == '__main__':
 
         elif o in ("-q" or "start-job"):
             startBuildOfJob(projectName)
+
+if __name__ == '__main__':
+    main()

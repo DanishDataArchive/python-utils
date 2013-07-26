@@ -2,7 +2,7 @@
 
 import magic, getopt, sys
 
-if __name__ == "__main__":
+def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "b:f:m", ["bytes=", "file=", "mime"])
     except getopt.GetoptError as err:
@@ -24,3 +24,6 @@ if __name__ == "__main__":
         print magic.from_buffer(open(file).read(bytes), mime)
     else:
         print "Please specify a file"
+
+if __name__ == "__main__":
+    main()

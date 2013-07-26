@@ -17,7 +17,7 @@ def checkIfFilesExists(files):
     for file in files:
         checkIfFileExists(file)
 
-if __name__ == "__main__":
+def main():
     lines = []
     
     try:
@@ -41,3 +41,6 @@ if __name__ == "__main__":
         print "Please provide some files to check for"
     
     checkIfFilesExists(lines)    
+
+if __name__ == "__main__":
+    main()

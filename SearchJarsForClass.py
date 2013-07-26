@@ -2,7 +2,7 @@
 
 import getopt, sys, os, zipfile
 
-if __name__ == "__main__":
+def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "c:j:", ["class=", "jars="])
 
@@ -47,3 +47,6 @@ if __name__ == "__main__":
             print line
     else:
         print "Not found"
+
+if __name__ == "__main__":
+    main()

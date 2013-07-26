@@ -68,7 +68,7 @@ def clean(directory, maxdirs):
             
             i += 1
 
-if __name__ == "__main__":
+def main():
     syslog.openlog("DirectoryCleaner")
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hd:tm:cv", ["help", "dir=", "test", "max-dirs=", "cron", "verbose"])
@@ -116,3 +116,6 @@ if __name__ == "__main__":
     clean(dir, maxdirs)
     
     syslog.closelog()
+
+if __name__ == "__main__":
+    main()

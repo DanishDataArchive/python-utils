@@ -2,7 +2,7 @@
 
 import getopt, sys
 
-if __name__ == "__main__":
+def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "s:d:", ["string=", "delimiter="])
     except getopt.GetoptError as err:
@@ -25,3 +25,6 @@ if __name__ == "__main__":
     
     for split in splits:
         print split
+
+if __name__ == "__main__":
+    main()
