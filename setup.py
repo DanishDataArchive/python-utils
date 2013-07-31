@@ -21,6 +21,7 @@ setup(
             'magic = utils.Magic:main',
             'searchjarsforclass = utils.SearchJarsForClass:main',
             'splitstring = utils.SplitString:main',
+            'travis = utils.Travis:main',
         ]
     }
 )
