@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from git import *
-import os, optparse, sys
+import os, optparse, sys, pkg_resources
 
 class GitColors:
     UP_TO_DATE = '\033[92m'
@@ -64,7 +64,7 @@ def fetch(projects):
             print project + " is not a valid git repository"
 
 def main():
-    parser = optparse.OptionParser(version="0.1", epilog="Git for multiple repos", description="GPL")
+    parser = optparse.OptionParser(version=pkg_resources.require("py-utils-dda")[0].version, epilog="Git for multiple repos", description="GPL")
     parser.add_option("-s", "--status", dest="status", action="store_true")
     parser.add_option("-l", "--pull", dest="pull", action="store_true")
     parser.add_option("-f", "--fetch", dest="fetch", action="store_true")
