@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import urllib2, simplejson, sys
+import urllib2, simplejson, sys, pkg_resources
 
 from optparse import OptionParser
 
@@ -29,7 +29,7 @@ def printBuildDetails(projectName, build):
         print "\tResult: " + str(subBuild['result']) + "\n"
 
 def main():
-    parser = OptionParser(version="0.1", epilog="Fetch info from travis-ci.org", description="GPL")
+    parser = OptionParser(version=pkg_resources.require("py-utils-dda")[0].version, epilog="Fetch info from travis-ci.org", description="GPL")
     parser.add_option("-p", "--project", dest="projectName", action="store", type="string")
     parser.add_option("-l", "--latest-build", dest="latestBuild", action="store_true")
     parser.add_option("-o", "--organization", dest="org", action="store", type="string")
