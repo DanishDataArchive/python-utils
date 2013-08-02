@@ -58,8 +58,7 @@ def main():
     parser.add_option("-b", "--build", dest="buildNumber", action="store", type="int")
     parser.add_option("-p", "--project", dest="projectName", action="store", type="string")
     parser.add_option("-l", "--latest-build", dest="latestBuild", action="store_true")
-    parser.add_option("-o", "--organization", dest="org", action="store", type="string")
-    parser.add_option("-u", "--user", dest="user", action="store", type="string")
+    parser.add_option("-o", "--owner", dest="owner", action="store", type="string")
 
     (opts, args) = parser.parse_args(sys.argv)
 
@@ -67,12 +66,12 @@ def main():
         print "Please provide a project"
         sys.exit(-1)
 
-    if not (opts.org or opts.user):
-        print "Please provide a user or organization"
+    if not opts.owner:
+        print "Please provide a owner"
         sys.exit(-1)
 
     projectName = opts.projectName
-    parent = opts.user or opts.org
+    parent = opts.owner
 
     try:
         project = getProjectInfo(parent, projectName)
