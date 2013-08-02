@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-import getopt, sys, os
+import sys, os, pkg_resources
+
+from optparse import OptionParser
 
 class FileColors:
     EXISTS = '\033[92m'
@@ -19,19 +21,17 @@ def checkIfFilesExists(files):
 
 def main():
     lines = []
-    
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "f:", ["files="])
 
-    except getopt.GetoptError as err:
-        print str(err);
+    parser = OptionParser(version=pkg_resources.require("py-utils-dda")[0].version, epilog="Check if files exists", description="GPL")
+    parser.add_option("-f", "--files", dest="files", action="store", type="string")
 
-    for o, a in opts:
-        if o in ("-f", "--files"):
-            files = open(a)
-            for line in files.readlines():
-                lines.append(line.rstrip("\n"))
-            files.close()
+    (opts, args) = parser.parse_args(sys.argv)
+
+    if opts.files:
+        files = open(opts.files)
+        for line in files.readlines():
+            lines.append(line.rstrip("\n"))
+        files.close()
 
     if len(lines) == 0:
         for line in sys.stdin:
@@ -39,7 +39,7 @@ def main():
 
     if len(lines) == 0:
         print "Please provide some files to check for"
-    
+
     checkIfFilesExists(lines)    
 
 if __name__ == "__main__":
