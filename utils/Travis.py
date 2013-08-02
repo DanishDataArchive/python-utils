@@ -3,6 +3,7 @@
 import urllib2, simplejson, sys, pkg_resources
 
 from optparse import OptionParser
+from types import *
 
 def printBuild(build, printNumber = False):
     if printNumber:
@@ -10,7 +11,10 @@ def printBuild(build, printNumber = False):
 
     if build['config']:
         if build['config']['jdk']:
-            print "\tJDK: " + build['config']['jdk']
+            if type(build['config']['jdk']) is list:
+                print "\tJDK: " + build['config']['jdk'][0]
+            else:
+                print "\tJDK: " + str(build['config']['jdk'])
     print "\tFinished at: " + str(build['finished_at'])
     print "\tResult: " + str(build['result']) + "\n"
 
@@ -46,7 +50,7 @@ def printBuildDetails(projectName, build):
         for subBuild in build['matrix']:
             printBuild(subBuild, True)
     else:
-        printBuild(subBuild)
+        printBuild(build)
 
 def main():
     parser = OptionParser(version=pkg_resources.require("py-utils-dda")[0].version, epilog="Fetch info from travis-ci.org", description="GPL")
