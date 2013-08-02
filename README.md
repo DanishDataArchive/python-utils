@@ -14,4 +14,4 @@ The tools are aliased as follows:
 6. splitstring = utils.SplitString
 7. travis = util.Travis
 
-try jenkins -v
+try jenkins --version
