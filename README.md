@@ -13,5 +13,6 @@ The tools are aliased as follows:
 5. searchjarsforclass = utils.SearchJarsForClass
 6. splitstring = utils.SplitString
 7. travis = util.Travis
+8. git-projects = util.GitProjects
 
 try jenkins --version
