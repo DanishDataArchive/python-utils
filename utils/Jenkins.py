@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-import urllib2, datetime, sys, getopt, ConfigParser, os, pkg_resources
+import urllib2, datetime, sys, ConfigParser, os, pkg_resources
+
+from optparse import OptionParser
 
 class JobColors:
     SUCCES = '\033[92m'
@@ -27,7 +29,7 @@ def buildHostUrl():
     
     url += ":"
     
-    url += port
+    url += str(port)
     
     url += "/"
     
@@ -68,12 +70,19 @@ def main():
     global protocol
     global secure
 
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "b:ceh:j:lp:qsv", ["build=", "console", "encrypted", "host=", "job=", "list", "port=", "start-job", "status", "version"])
-        
-    except getopt.GetoptError as err:
-        print str(err)
-    
+    parser = OptionParser(version=pkg_resources.require("py-utils-dda")[0].version, epilog="Fetch info from a jenkins host", description="GPL")
+    parser.add_option("-b", "--build", dest="buildNumber", action="store", type="int")
+    parser.add_option("-c", "--console", dest="console", action="store_true")
+    parser.add_option("-e", "--encrypted", dest="encrypted", action="store_true")
+    parser.add_option("--host", dest="host", action="store", type="string")
+    parser.add_option("-j", "--job", dest="job", action="store", type="string")
+    parser.add_option("-l", "--list", dest="list", action="store_true")
+    parser.add_option("--port", dest="port", action="store", type="int")
+    parser.add_option("-q", "--start-job", dest="startJob", action="store_true")
+    parser.add_option("-s", "--status", dest="status", action="store_true")
+
+    (opts, args) = parser.parse_args(sys.argv)
+
     Config = ConfigParser.ConfigParser()
     Config.read(os.path.join(os.path.expanduser("~"), ".py-jenkins/py-jenkins.conf"))
 
@@ -88,64 +97,61 @@ def main():
             elif option in 'secure':
                 secure = Config.getboolean('global', option)
 
-    for o, a in opts:
-        if o in ("-h", "--host"):
-            host = a
-            
-        if o in ("-p", "--port"):
-            port = a
+    if opts.host:
+        host = opts.host
 
-        if o in ("-l", "--list"):
-            projects = getProjects()
-            
-            for project in projects['jobs']:
-                if project['color'] == "blue":
-                    print JobColors.SUCCES + project['name'] + JobColors.END
-                elif project['color'] == "blue_anime":
-                    print JobColors.SUCCES + project['name'] + " (working)" + JobColors.END
-                else:
-                    print JobColors.FAIL + project['name'] + " (" + project['color'] + ")" + JobColors.END
+    if opts.port:
+        port = opts.port
 
-        elif o in ("-s", "--status"):
-            projects = getProjects()
-            
-            for project in projects['jobs']:
-                if project['color'] == "blue":
-                    print JobColors.SUCCES + project['name'] + JobColors.END
-                elif project['color'] == "blue_anime":
-                    print JobColors.SUCCES + project['name'] + " (working)" + JobColors.END
-                else:
-                    print JobColors.FAIL + project['name'] + " (" + project['color'] + ")" + JobColors.END
-        
-                success = getLastSuccessFulBuild(project['name'])
-                if success:
-                    successDetails = getBuildDetails(project['name'], success['number'])
-                    print "\tLast Successful: " + str(success['number']) + " at " + str(getDateTimeFromTimeStamp(successDetails['timestamp']))
-                
-                unsucces = getLastUnsuccessFulBuild(project['name'])
-                
-                if unsucces:
-                    unsuccessDetails = getBuildDetails(project['name'], success['number'])
-                    print "\tLast Unsuccessful: " + str(unsucces['number']) + " at " + str(getDateTimeFromTimeStamp(unsuccessDetails['timestamp']))
-        elif o in ("-e", "--encrypted"):
-            secure = True
+    if opts.encrypted:
+        secure = True
 
-        elif o in ("-c" or "--console"):
-            output = getConsoleOutputForBuild(projectName, buildNumber)
-            if output:
-                print output
+    if opts.job:
+        projectName = opts.job
 
-        elif o in ("-j" or "--job"):
-            projectName = a
+    if opts.buildNumber:
+        buildNumber = opts.buildNumber
 
-        elif o in ("-b" or "--build"):
-            buildNumber = a
+    if opts.list:
+        projects = getProjects()
 
-        elif o in ("-q" or "start-job"):
-            startBuildOfJob(projectName)
+        for project in projects['jobs']:
+            if project['color'] == "blue":
+                print JobColors.SUCCES + project['name'] + JobColors.END
+            elif project['color'] == "blue_anime":
+                print JobColors.SUCCES + project['name'] + " (working)" + JobColors.END
+            else:
+                print JobColors.FAIL + project['name'] + " (" + project['color'] + ")" + JobColors.END
 
-        elif o in ("-v" or "version"):
-            print pkg_resources.require("py-utils-dda")[0].version
+    if opts.status:
+        projects = getProjects()
+
+        for project in projects['jobs']:
+            if project['color'] == "blue":
+                print JobColors.SUCCES + project['name'] + JobColors.END
+            elif project['color'] == "blue_anime":
+                print JobColors.SUCCES + project['name'] + " (working)" + JobColors.END
+            else:
+                print JobColors.FAIL + project['name'] + " (" + project['color'] + ")" + JobColors.END
+
+            success = getLastSuccessFulBuild(project['name'])
+            if success:
+                successDetails = getBuildDetails(project['name'], success['number'])
+                print "\tLast Successful: " + str(success['number']) + " at " + str(getDateTimeFromTimeStamp(successDetails['timestamp']))
+
+            unsucces = getLastUnsuccessFulBuild(project['name'])
+
+            if unsucces:
+                unsuccessDetails = getBuildDetails(project['name'], success['number'])
+                print "\tLast Unsuccessful: " + str(unsucces['number']) + " at " + str(getDateTimeFromTimeStamp(unsuccessDetails['timestamp']))
+
+    if opts.console:
+        output = getConsoleOutputForBuild(projectName, buildNumber)
+        if output:
+            print output
+
+    if opts.startJob:
+        startBuildOfJob(projectName)
 
 if __name__ == '__main__':
     main()
