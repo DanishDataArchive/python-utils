@@ -8,6 +8,8 @@ setup(
     version = get_git_version(),
     packages = find_packages(),
 
+    install_requires = ["GitPython>=0.3.2.RC1", "python-magic>=0.4.3"],
+
     author = "Martin Jensby",
     author_email = "marj@dda.dk",
     description = "Collection of python utils for dda",
@@ -22,6 +24,7 @@ setup(
             'searchjarsforclass = utils.SearchJarsForClass:main',
             'splitstring = utils.SplitString:main',
             'travis = utils.Travis:main',
+            'git-projects = utils.GitProjects:main',
         ]
     }
 )
