@@ -25,6 +25,7 @@ setup(
             'splitstring = utils.SplitString:main',
             'travis = utils.Travis:main',
             'git-projects = utils.GitProjects:main',
+            'copy = utils.Copy:main',
         ]
     }
 )
