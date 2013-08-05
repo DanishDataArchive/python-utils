@@ -35,9 +35,17 @@ def buildHostUrl():
     
     return url
 
-def getConsoleOutputForBuild(projectName, buildId):
+def getConsoleOutputForBuild(projectName, buildId, numberOfLines):
     try:
-        return urllib2.urlopen(buildHostUrl() + "job/" + projectName + "/" + str(buildId) + "/logText/progressiveText?start=0").read()
+        consoleOutPut = urllib2.urlopen(buildHostUrl() + "job/" + projectName + "/" + str(buildId) + "/logText/progressiveText?start=0").read().split("\n")
+        trimmedOutPut = consoleOutPut[len(consoleOutPut) - numberOfLines:]
+
+        result = ""
+
+        for line in trimmedOutPut:
+            result += line + "\n"
+
+        return result
     except urllib2.HTTPError as err:
         print err.reason
 
@@ -80,6 +88,7 @@ def main():
     parser.add_option("--port", dest="port", action="store", type="int")
     parser.add_option("-q", "--start-job", dest="startJob", action="store_true")
     parser.add_option("-s", "--status", dest="status", action="store_true")
+    parser.add_option("-n", "--number-of-lines", dest="numberOfLines", action="store", type="int", default=10)
 
     (opts, args) = parser.parse_args(sys.argv)
 
@@ -146,7 +155,7 @@ def main():
                 print "\tLast Unsuccessful: " + str(unsucces['number']) + " at " + str(getDateTimeFromTimeStamp(unsuccessDetails['timestamp']))
 
     if opts.console:
-        output = getConsoleOutputForBuild(projectName, buildNumber)
+        output = getConsoleOutputForBuild(projectName, buildNumber, opts.numberOfLines)
         if output:
             print output
 
