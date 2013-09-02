@@ -101,8 +101,6 @@ def main():
                 host = Config.get('global', option)
             elif option in 'port':
                 port = Config.get('global', option)
-            elif option in 'protocol':
-                protocol = Config.get('global', option)
             elif option in 'secure':
                 secure = Config.getboolean('global', option)
 
