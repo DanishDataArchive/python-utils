@@ -11,7 +11,7 @@ def printUsage():
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "c:hj:vV", ["class=", "help", "jars=", "verbose", "version"])
+        opts, args = getopt.getopt(sys.argv[1:], "c:hj:vVi", ["class=", "help", "jars=", "verbose", "version", "ignore-package-names"])
 
     except getopt.GetoptError as err:
         print str(err)
@@ -20,6 +20,7 @@ def main():
     classes = dict()
     classToFind = ""
     verbose = False
+    ignorePackageNames = False
 
     for o, a in opts:
         if o in ("-c", "--class"):
@@ -37,6 +38,8 @@ def main():
         elif o in  ("-V", "--version"):
             print pkg_resources.require("py-utils-dda")[0].version
             sys.exit(0)
+        elif o in  ("-i", "--ignore-package-names"):
+            ignorePackageNames = True
 
     if len(lines) == 0:
         for line in sys.stdin:
@@ -51,7 +54,13 @@ def main():
 
         for filename in zFile.namelist():
             if filename.endswith(".class"):
-                key = filename.replace('/', '.').replace(".class", "").strip()
+                key = None
+
+                if not ignorePackageNames:
+                    key = filename.replace('/', '.').replace(".class", "").strip()
+                else:
+                    key = os.path.basename(filename.replace(".class", "").strip())
+
                 if classes.has_key(key):
                     classes[key].append(file + "!" + filename)
                 else:
